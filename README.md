@@ -1,6 +1,5 @@
 # Task Management API
 
-**FlyRank Backend Internship — Week 2**
 
 A RESTful API built with **Python** and **FastAPI** to create, retrieve, update, and delete tasks.
 
