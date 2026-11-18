@@ -1,119 +1,160 @@
-# Task API — FlyRank Backend Track (Week 2, Assignment A1)
+# Task Management API
 
-A small Task Management API built with **Python** and **FastAPI**. It supports creating, reading, updating, and deleting tasks.
+**FlyRank Backend Internship — Week 2**
+
+A RESTful API built with **Python** and **FastAPI** to create, retrieve, update, and delete tasks.
 
 ## Requirements
 
 - Python 3.10+
 - pip
 
-## Install and run
+## Installation and Setup
 
-Create and activate a virtual environment, then install the dependencies:
+### 1. Create a virtual environment
 
 ```bash
 python -m venv .venv
 ```
 
-Windows PowerShell:
+### 2. Activate the virtual environment
+
+**Windows PowerShell:**
 
 ```powershell
 .venv\Scripts\Activate.ps1
 ```
 
-macOS / Linux:
+**macOS / Linux:**
 
 ```bash
 source .venv/bin/activate
 ```
 
-Install and start the server:
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
+```
+
+### 4. Run the API
+
+```bash
 uvicorn main:app --reload
 ```
 
-The API runs at `http://127.0.0.1:8000`.
+The API will be available at:
 
-## Interactive API documentation
+http://127.0.0.1:8000
 
-Open **http://127.0.0.1:8000/docs** to see all endpoints and test them with Swagger UI's **Try it out** button.
+## Interactive API Documentation
 
-Save a screenshot of the Swagger page as `docs/swagger.png` and include it in this repository before submitting.
+FastAPI automatically generates interactive API documentation using Swagger UI.
 
-## Endpoints
+Open the following URL in your browser:
 
-| Method | Endpoint | Description | Success status |
+http://127.0.0.1:8000/docs
+
+Use the **Try it out** button to test the API endpoints directly from your browser.
+
+Before submitting the assignment, save a screenshot of the Swagger documentation as:
+
+`docs/swagger.png`
+
+## API Endpoints
+
+| Method | Endpoint | Description | Success Status |
 |---|---|---|---:|
 | GET | `/` | API information | 200 |
 | GET | `/health` | Health check | 200 |
 | GET | `/tasks` | List all tasks | 200 |
-| GET | `/tasks/{task_id}` | Get one task | 200 |
-| POST | `/tasks` | Create a task | 201 |
-| PUT | `/tasks/{task_id}` | Update a task | 200 |
+| GET | `/tasks/{task_id}` | Get one task by ID | 200 |
+| POST | `/tasks` | Create a new task | 201 |
+| PUT | `/tasks/{task_id}` | Update an existing task | 200 |
 | DELETE | `/tasks/{task_id}` | Delete a task | 204 |
 
-Errors:
-- `400` — invalid request body or missing/empty title. The response contains an `error` message.
-- `404` — task ID does not exist. The response contains an `error` message.
+### Error Responses
 
-## Example requests
+The API handles the following errors:
 
-List tasks:
+- **400 Bad Request:** Returned when the request body is invalid or the task title is missing or empty. The response contains an `error` message.
+- **404 Not Found:** Returned when the requested task ID does not exist. The response contains an `error` message.
+
+## Example Requests
+
+The following examples use `curl` to interact with the API.
+
+### 1. List all tasks
 
 ```bash
 curl -i http://localhost:8000/tasks
 ```
 
-Get one task:
+### 2. Get one task
 
 ```bash
 curl -i http://localhost:8000/tasks/1
 ```
 
-Create a task:
+### 3. Create a new task
 
 ```bash
 curl -i -X POST http://localhost:8000/tasks -H "Content-Type: application/json" -d '{"title":"Buy milk"}'
 ```
 
-Update a task:
+### 4. Update an existing task
 
 ```bash
 curl -i -X PUT http://localhost:8000/tasks/1 -H "Content-Type: application/json" -d '{"title":"Study FastAPI","done":true}'
 ```
 
-Delete a task:
+### 5. Delete a task
 
 ```bash
 curl -i -X DELETE http://localhost:8000/tasks/1
 ```
 
-An invalid create request such as `{}` returns `400`:
+### 6. Test an invalid create request
+
+An empty request body should return a `400 Bad Request` response.
 
 ```bash
 curl -i -X POST http://localhost:8000/tasks -H "Content-Type: application/json" -d '{}'
 ```
 
-## Example `curl -i` output
+## Example curl Output
 
-The exact headers can vary. A successful task-list request should include:
+Paste an actual `curl -i` response from your running API here before submitting.
+
+For example, a successful request to list all tasks should return an HTTP `200 OK` response with a JSON array of tasks.
+
+## Storage
+
+Tasks are stored in a Python list in memory.
+
+- No database is used.
+- No file storage is used.
+- The task list resets to the three example tasks whenever the server restarts.
+
+## Project Structure
 
 ```text
-HTTP/1.1 200 OK
-content-type: application/json
-
-[{"id":1,"title":"Study Python","done":false},{"id":2,"title":"Finish Assignment","done":false},{"id":3,"title":"Learn FastAPI","done":true}]
+First_CRUD_API/
+│
+├── main.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+└── docs/
+    └── swagger.png
 ```
 
-## Storage note
+## GitHub Submission Checklist
 
-Tasks are stored in a Python list in memory. No database or file storage is used. The task list resets to the three example tasks whenever the server restarts.
-
-## GitHub submission checklist
-
-- [ ] Create a **public** GitHub repository.
-- [ ] Commit the work as you complete the assignment stages (Stages 0–6); the assignment asks for at least 6 meaningful commits.
-- [ ] Include this README, the endpoint table, a real `curl -i` output, and your Swagger screenshot.
-- [ ] Push the commits to GitHub.
+- [ ] Create a public GitHub repository.
+- [ ] Make at least 6 meaningful commits while completing the assignment stages (Stages 0–6).
+- [ ] Include this README file.
+- [ ] Include the API endpoints table.
+- [ ] Include actual `curl -i` output.
+- [ ] Include a Swagger UI screenshot at `docs/swagger.png`.
+- [ ] Push all commits to GitHub.
