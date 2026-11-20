@@ -9,13 +9,20 @@ A RESTful API built with **Python** and **FastAPI** to create, retrieve, update,
 
 ## Installation and Setup
 
-### 1. Create a virtual environment
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/engy-salem/First_CRUD_API.git
+cd First_CRUD_API
+```
+
+### 2. Create a virtual environment
 
 ```bash
 python -m venv .venv
 ```
 
-### 2. Activate the virtual environment
+### 3. Activate the virtual environment
 
 **Windows PowerShell:**
 
@@ -29,13 +36,13 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 
-### 3. Install dependencies
+### 4. Install dependencies
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
-### 4. Run the API
+### 5. Run the API
 
 ```bash
 uvicorn main:app --reload
@@ -57,8 +64,6 @@ Swagger UI provides an interactive interface to explore and test all API endpoin
 
 ### Swagger UI Screenshot
 
-The following screenshot shows the interactive API documentation and all implemented endpoints.
-
 ![Swagger UI](docs/swagger.png)
 
 ## API Endpoints
@@ -73,7 +78,7 @@ The following screenshot shows the interactive API documentation and all impleme
 | PUT | `/tasks/{task_id}` | Update an existing task | 200 |
 | DELETE | `/tasks/{task_id}` | Delete a task | 204 |
 
-### Error Responses
+## Error Responses
 
 The API handles the following errors:
 
@@ -84,21 +89,82 @@ Both error responses contain an `error` message.
 
 ## Example Requests
 
-The following examples use `curl` to interact with the API.
+The following examples show how to interact with the API using curl.
 
-### 1. List all tasks
+### Windows PowerShell
+
+**Important:** Use `curl.exe` instead of `curl` in Windows PowerShell.
+
+#### 1. List all tasks
+
+```powershell
+curl.exe -i http://localhost:8000/tasks
+```
+
+#### 2. Get one task
+
+```powershell
+curl.exe -i http://localhost:8000/tasks/1
+```
+
+#### 3. Create a new task
+
+```powershell
+$bodyFile = Join-Path $env:TEMP "task-api-body.json"
+'{"title":"Buy milk"}' | Set-Content -NoNewline -Encoding ascii $bodyFile
+
+curl.exe -i -X POST "http://localhost:8000/tasks" -H "Content-Type: application/json" --data-binary "@$bodyFile"
+```
+
+Expected status: `201 Created`
+
+#### 4. Update an existing task
+
+```powershell
+$bodyFile = Join-Path $env:TEMP "task-api-body.json"
+'{"title":"Study FastAPI","done":true}' | Set-Content -NoNewline -Encoding ascii $bodyFile
+
+curl.exe -i -X PUT "http://localhost:8000/tasks/1" -H "Content-Type: application/json" --data-binary "@$bodyFile"
+```
+
+Expected status: `200 OK`
+
+#### 5. Delete a task
+
+```powershell
+curl.exe -i -X DELETE "http://localhost:8000/tasks/1"
+```
+
+Expected status: `204 No Content`
+
+#### 6. Test an invalid create request
+
+```powershell
+$bodyFile = Join-Path $env:TEMP "task-api-body.json"
+'{}' | Set-Content -NoNewline -Encoding ascii $bodyFile
+
+curl.exe -i -X POST "http://localhost:8000/tasks" -H "Content-Type: application/json" --data-binary "@$bodyFile"
+```
+
+Expected status: `400 Bad Request`
+
+### macOS / Linux
+
+The following commands can be executed directly in the terminal.
+
+#### 1. List all tasks
 
 ```bash
 curl -i http://localhost:8000/tasks
 ```
 
-### 2. Get one task
+#### 2. Get one task
 
 ```bash
 curl -i http://localhost:8000/tasks/1
 ```
 
-### 3. Create a new task
+#### 3. Create a new task
 
 ```bash
 curl -i -X POST http://localhost:8000/tasks \
@@ -106,7 +172,7 @@ curl -i -X POST http://localhost:8000/tasks \
 -d '{"title":"Buy milk"}'
 ```
 
-### 4. Update an existing task
+#### 4. Update an existing task
 
 ```bash
 curl -i -X PUT http://localhost:8000/tasks/1 \
@@ -114,15 +180,13 @@ curl -i -X PUT http://localhost:8000/tasks/1 \
 -d '{"title":"Study FastAPI","done":true}'
 ```
 
-### 5. Delete a task
+#### 5. Delete a task
 
 ```bash
 curl -i -X DELETE http://localhost:8000/tasks/1
 ```
 
-### 6. Test an invalid create request
-
-An empty request body returns a `400 Bad Request` response.
+#### 6. Test an invalid create request
 
 ```bash
 curl -i -X POST http://localhost:8000/tasks \
@@ -130,9 +194,11 @@ curl -i -X POST http://localhost:8000/tasks \
 -d '{}'
 ```
 
+Expected status: `400 Bad Request`
+
 ## API Testing Results
 
-The API was tested successfully using `curl.exe -i` in Windows PowerShell.
+The API was tested using `curl.exe -i` in Windows PowerShell.
 
 The following operations were tested:
 
