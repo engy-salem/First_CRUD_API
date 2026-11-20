@@ -98,3 +98,31 @@ def get_task(task_id: int):
     return task_not_found(task_id)
 
 
+@app.post(
+    "/tasks",
+    status_code=201,
+    summary="Create a task",
+    description="Creates a task. The title is required and done starts as false.",
+)
+def create_task(task_data: TaskCreate):
+    if task_data.title is None or not task_data.title.strip():
+        return JSONResponse(
+            status_code=400,
+            content={"error": "Title is required and cannot be empty"},
+        )
+
+    next_id = 1
+    existing_ids = {task["id"] for task in tasks}
+    while next_id in existing_ids:
+        next_id += 1
+
+    new_task = {
+        "id": next_id,
+        "title": task_data.title.strip(),
+        "done": False,
+    }
+    tasks.append(new_task)
+
+    return JSONResponse(status_code=201, content=new_task)
+
+
