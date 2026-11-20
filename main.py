@@ -126,3 +126,46 @@ def create_task(task_data: TaskCreate):
     return JSONResponse(status_code=201, content=new_task)
 
 
+@app.put(
+    "/tasks/{task_id}",
+    summary="Update a task",
+    description="Updates the title, done value, or both for an existing task.",
+)
+def update_task(task_id: int, task_data: TaskUpdate):
+    task_to_update = None
+
+    for task in tasks:
+        if task["id"] == task_id:
+            task_to_update = task
+            break
+
+    if task_to_update is None:
+        return task_not_found(task_id)
+
+    update_data = task_data.model_dump(exclude_unset=True)
+
+    if not update_data:
+        return JSONResponse(
+            status_code=400,
+            content={"error": "Request body must contain title and/or done"},
+        )
+
+    if "title" in update_data:
+        title = update_data["title"]
+        if title is None or not title.strip():
+            return JSONResponse(
+                status_code=400,
+                content={"error": "Title cannot be empty"},
+            )
+        task_to_update["title"] = title.strip()
+
+    if "done" in update_data:
+        done = update_data["done"]
+        if done is None:
+            return JSONResponse(
+                status_code=400,
+                content={"error": "Done must be true or false"},
+            )
+        task_to_update["done"] = done
+
+    return task_to_update
