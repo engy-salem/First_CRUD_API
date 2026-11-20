@@ -20,3 +20,20 @@ tasks = [
 ]
 
 
+class TaskCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    # Optional here so missing title can return the assignment's required 400,
+    # rather than FastAPI's default 422.
+    title: str | None = None
+
+
+class TaskUpdate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    # PUT accepts title, done, or both.
+    title: str | None = None
+    done: bool | None = None
+
+
+
