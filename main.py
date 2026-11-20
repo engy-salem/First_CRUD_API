@@ -169,3 +169,19 @@ def update_task(task_id: int, task_data: TaskUpdate):
         task_to_update["done"] = done
 
     return task_to_update
+
+
+
+@app.delete(
+    "/tasks/{task_id}",
+    status_code=204,
+    summary="Delete a task",
+    description="Deletes an existing task. A successful deletion has no response body.",
+)
+def delete_task(task_id: int):
+    for index, task in enumerate(tasks):
+        if task["id"] == task_id:
+            tasks.pop(index)
+            return Response(status_code=204)
+
+    return task_not_found(task_id)
